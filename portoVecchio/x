@@ -1,0 +1,85 @@
+---
+
+**PORTO VECCHIO — WEBSITE BUILD BRIEF**
+*Read fully before writing a single line of code.*
+
+---
+
+**THE PLACE**
+Porto Vecchio Ristorante Bar — Via Porto Romano 20/22, Ventotene (LT), Lazio, Italy.
+Bar and restaurant sitting directly on the ancient Roman port, entirely carved into tuff rock. One of the most visually and historically distinctive locations on the island. Open daily 06:00–24:00 (seasonal variation). This is a regalo — a gift — from me (Ghaith, the waiter) to the owner. No budget, full creative control.
+
+**CONTACTS — use exactly as written**
+- Tel: +39 345 453 3201 / +39 0771 85041
+- Email: info@ristorantebarportovecchioventotene.com
+- Facebook: facebook.com/barportovecchio
+- Instagram: portovecchio\_ventotene\_ristoro
+- TripAdvisor: 287 reviews · 4.2/5 · #5 of 21 restaurants in Ventotene
+
+---
+
+**WHAT MAKES THEM DIFFERENT — build the site around these**
+1. The Roman port carved into tuff — ancient, raw, Mediterranean. Not a generic seafront. This is the soul of the place and should be felt throughout the site's tone and copy.
+2. Boat bar service — €2 surcharge, they bring drinks and food directly to boats docked in the port. Nobody else on the island does this. It gets its own section, not a bullet point.
+3. Local Ventotene ingredients — fresh fish, tuna tartare, lobster, island produce. Quality-focused, not tourist-trap.
+
+---
+
+**AESTHETIC — decided, not negotiable**
+Warm dark elegant. Think: deep warm blacks and dark navies, gold and amber accents, subtle mediterranean texture. The feeling of a summer night on an ancient stone port. Not cold. Not corporate. Not generic Italian restaurant red-and-white. References: high-end coastal dining, warm candlelight, aged stone.
+
+---
+
+**SECTIONS — in this exact order**
+1. **Hero** — full viewport, real photo background (provided), restaurant name + short tagline, IT/EN language toggle, smooth CTA scroll button
+2. **About** — the Roman port story, tuff rock, the history and soul. Evocative copy, not a Wikipedia entry
+3. Menu — populated from photos I send at conversation start. Food and drinks only. No gelato or ice cream — that belongs to a separate vendor, not Porto Vecchio
+4. **Boat Service** — dedicated full section. This is a unique feature, treat it that way visually
+5. **Gallery** — real photos I provide. Clean grid with lightbox on click. No backend needed — static photos only. For extended gallery: Instagram link, nothing more
+6. **Social Proof** — TripAdvisor 4.2/5 badge + 2–3 real review quotes pulled from their page
+7. **Contact + Hours + Map** — embedded Google Map, full hours, both phone numbers
+8. **Footer** — contacts, socials, copyright, clean
+
+---
+
+**TECHNICAL REQUIREMENTS — non-negotiable**
+- Single HTML file. All CSS and JS inline. Zero external dependencies that require installation
+- Fonts and icons loaded via CDN only (Google Fonts, a lightweight icon set)
+- Bilingual IT/EN — one toggle, everything switches, no page reload
+- Fully mobile responsive — same experience, not a stripped version
+- Hosted on GitHub Pages, custom domain connected via DNS (owner keeps existing domain for now)
+- No frameworks, no build tools, no node_modules, no package.json
+
+---
+
+**ANIMATIONS — this is important**
+Not just fade-in/fade-out. The site should feel alive:
+- Parallax depth on the hero section
+- Section reveals with directional movement — elements entering from different sides, staggered timing on children
+- The boat service section gets something atmospheric — slow drift, subtle wave motion, something that matches the port environment
+- Gallery items with tactile hover states
+- Smooth scroll-driven behaviour throughout
+- Scroll progress indicator
+- **Rule:** GPU-accelerated transforms only — translate, scale, opacity. Never animate height, width, margin, or padding. No GSAP or heavy animation libraries. Pure CSS + vanilla JS. Fast on any phone.
+
+---
+
+**MATTERPORT 3D TOUR — future integration**
+No camera available currently. Include a hidden placeholder section — `display:none`, clean commented-out iframe ready to paste a Matterport embed URL into. Invisible to visitors, one line to activate when the time comes. Well-commented.
+
+---
+
+**PHOTOS**
+I send them immediately after pasting this prompt, before you write any code. They include: menu pages, gelato/ice cream price board, venue exterior and interior, port view shots.
+
+**Wait for the photos. Confirm you have everything. Then we build section by section, not all at once.**
+
+---
+
+**ONE QUESTION ONLY before starting:**
+Do you have everything you need, or is anything unclear?
+*(Do not ask multiple questions. Do not start coding until photos are received.)*
+
+---
+
+That's the final version. Clean, nothing missing, nothing wasted. Paste it, send photos right after, and the new conversation goes straight to work.

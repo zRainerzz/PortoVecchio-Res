@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Porto Vecchio Ristorante Bar — Sul porto romano di Ventotene, scolpito nella roccia di tufo. Cucina di mare autentica.">
+  <meta name="theme-color" content="#0d0b09">
+  <title>Porto Vecchio — Ristorante Bar · Ventotene</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+
+  <style>
+
+    /* ═══════════════════════════════════════════════════
+       DESIGN TOKENS - Simone Website
+    ═══════════════════════════════════════════════════ */
+    :root {
+      --night:      #0d0b09;
+      --tuff:       #161210;
+      --navy:       #101820;
+      --amber:      #c8922a;
+      --amber-s:    rgba(200,146,42,.13);
+      --amber-m:    rgba(200,146,42,.3);
+      --amber-dim:  #7a5818;
+      --parchment:  #e8dcc8;
+      --stone:      #9a8a72;
+      --stone-dim:  #3e342c;
+      --ff-d: 'Cormorant Garamond', Georgia, serif;
+      --ff-b: 'Jost', system-ui, sans-serif;
+      --ease:   cubic-bezier(.25,.46,.45,.94);
+      --ease-o: cubic-bezier(0,0,.2,1);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       BASE
+    ═══════════════════════════════════════════════════ */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      background:var(--night);
+      color:var(--parchment);
+      font-family:var(--ff-b);
+      font-weight:300;
+      line-height:1.65;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+    }
+    img { display:block; max-width:100%; }
+    a   { color:inherit; text-decoration:none; }
+    button { cursor:pointer; }
+
+    /* ═══════════════════════════════════════════════════
+       SCROLL PROGRESS BAR
+    ═══════════════════════════════════════════════════ */
+    .sp { position:fixed; top:0; left:0; width:100%; height:2px; z-index:1000; pointer-events:none; }
+    .sp__bar {
+      height:100%; width:100%;
+      background:linear-gradient(90deg, var(--amber-dim), var(--amber));
+      transform-origin:left center;
+      transform:scaleX(0);
+      will-change:transform;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════════════════ */
+    .nav {
+      position:fixed; top:0; left:0; right:0; z-index:900;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:1.5rem 2.5rem;
+      transition:background .45s var(--ease), backdrop-filter .45s var(--ease);
+    }
+    .nav.is-dark {
+      background:rgba(13,11,9,.92);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+    }
+    .nav__brand {
+      font-family:var(--ff-d); font-weight:600; font-size:.9rem;
+      letter-spacing:.14em; text-transform:uppercase; color:var(--amber);
+      opacity:0; transform:translateX(-8px);
+      transition:opacity .4s var(--ease), transform .4s var(--ease);
+      pointer-events:none;
+    }
+    .nav.is-dark .nav__brand { opacity:1; transform:translateX(0); pointer-events:auto; }
+
+    .lang { display:flex; align-items:center; gap:.3rem; }
+    .lang__btn {
+      background:none; border:none;
+      font-family:var(--ff-b); font-size:.65rem; font-weight:500;
+      letter-spacing:.2em; text-transform:uppercase;
+      color:var(--stone); padding:.3rem .45rem;
+      transition:color .25s;
+    }
+    .lang__btn.is-on { color:var(--amber); }
+    .lang__sep { color:var(--amber-dim); font-size:.55rem; pointer-events:none; }
+
+    /* ═══════════════════════════════════════════════════
+       REVEAL SYSTEM  (IntersectionObserver driven)
+    ═══════════════════════════════════════════════════ */
+    .reveal {
+      opacity:0;
+      transform:translateY(28px);
+      transition:opacity .75s var(--ease-o), transform .75s var(--ease-o);
+    }
+    .reveal.from-left  { transform:translateX(-32px); }
+    .reveal.from-right { transform:translateX(32px);  }
+    .reveal.is-on {
+      opacity:1 !important;
+      transform:translate(0,0) !important;
+    }
+    /* Per-child stagger in .stagger parents */
+    .stagger > .reveal:nth-child(1)  { transition-delay:.00s; }
+    .stagger > .reveal:nth-child(2)  { transition-delay:.10s; }
+    .stagger > .reveal:nth-child(3)  { transition-delay:.20s; }
+    .stagger > .reveal:nth-child(4)  { transition-delay:.30s; }
+    .stagger > .reveal:nth-child(5)  { transition-delay:.40s; }
+    .stagger > .reveal:nth-child(6)  { transition-delay:.50s; }
+
+    /* ═══════════════════════════════════════════════════
+       SECTION SHARED
+    ═══════════════════════════════════════════════════ */
+    .sec { padding:7rem 0; }
+    .sec__inner { max-width:1200px; margin:0 auto; padding:0 2.5rem; }
+    .sec__eyebrow {
+      display:block;
+      font-family:var(--ff-b); font-size:.58rem; font-weight:500;
+      letter-spacing:.48em; text-transform:uppercase; color:var(--amber);
+      margin-bottom:1.25rem;
+    }
+    .sec__heading {
+      font-family:var(--ff-d); font-weight:700;
+      font-size:clamp(2.2rem,5vw,3.8rem);
+      line-height:1.05; color:var(--parchment);
+    }
+    .sec__rule {
+      width:48px; height:1px;
+      background:linear-gradient(90deg, var(--amber), transparent);
+      margin:2rem 0;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════════ */
+    .hero {
+      position:relative; height:100vh; min-height:640px;
+      overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+    }
+    /* Oversized for parallax headroom */
+    .hero__bg {
+      position:absolute;
+      top:-30vh; left:-5vw; right:-5vw; bottom:-30vh;
+      background-size:cover;
+      background-position:center 40%;
+      background-repeat:no-repeat;
+      will-change:transform;
+    }
+    .hero__over {
+      position:absolute; inset:0;
+      background:
+        linear-gradient(to top,
+          rgba(13,11,9,.97) 0%,
+          rgba(13,11,9,.6)  35%,
+          rgba(13,11,9,.15) 65%,
+          transparent       100%),
+        linear-gradient(to bottom,
+          rgba(13,11,9,.45) 0%,
+          transparent       22%);
+    }
+    .hero__vig {
+      position:absolute; inset:0;
+      background:radial-gradient(ellipse 85% 100% at 50% 50%, transparent 45%, rgba(13,11,9,.5) 100%);
+    }
+    .hero__content {
+      position:relative; z-index:2;
+      text-align:center; padding:2rem;
+      padding-top:8rem;
+      max-width:900px; width:100%;
+    }
+
+    /* Entrance animations — staggered keyframes */
+    .hero__eye {
+      font-family:var(--ff-b); font-size:.6rem; font-weight:400;
+      letter-spacing:.45em; text-transform:uppercase; color:var(--amber);
+      margin-bottom:1.5rem;
+      text-shadow:0 1px 18px rgba(13,11,9,.98), 0 0 40px rgba(13,11,9,.9);
+      opacity:0; transform:translateY(14px);
+      animation:kUp .9s var(--ease-o) .2s forwards;
+    }
+    .hero__name {
+      font-family:var(--ff-d); font-weight:700;
+      font-size:clamp(3rem,11vw,9rem);
+      line-height:.88; letter-spacing:.07em; text-transform:uppercase;
+      color:var(--parchment); margin-bottom:1.2rem;
+      opacity:0; transform:translateY(22px);
+      animation:kUp 1s var(--ease-o) .45s forwards;
+    }
+    .hero__deco {
+      display:flex; align-items:center; justify-content:center; gap:1rem;
+      margin-bottom:1.9rem;
+      opacity:0; animation:kFade .9s var(--ease-o) .82s forwards;
+    }
+    .hero__deco-line {
+      width:50px; height:1px;
+      background:linear-gradient(90deg, transparent, var(--amber));
+    }
+    .hero__deco-line:last-child { background:linear-gradient(90deg, var(--amber), transparent); }
+    .hero__deco-gem {
+      width:5px; height:5px; background:var(--amber); transform:rotate(45deg);
+    }
+    .hero__tag {
+      font-family:var(--ff-d); font-style:italic; font-weight:300;
+      font-size:clamp(1.05rem,2.8vw,1.65rem);
+      line-height:1.6; color:var(--parchment); margin-bottom:3.2rem;
+      opacity:0; transform:translateY(12px);
+      animation:kUp .9s var(--ease-o) 1s forwards;
+    }
+    .hero__cta {
+      display:inline-flex; align-items:center; gap:.85rem;
+      font-family:var(--ff-b); font-size:.68rem; font-weight:500;
+      letter-spacing:.3em; text-transform:uppercase; color:var(--parchment);
+      border:1px solid var(--amber-dim); padding:.95rem 2.4rem;
+      transition:color .3s, border-color .3s, background .3s;
+      opacity:0; animation:kFade 1s var(--ease-o) 1.3s forwards;
+    }
+    .hero__cta:hover { color:var(--amber); border-color:var(--amber); background:var(--amber-s); }
+    .hero__cta-arr {
+      display:inline-block; font-size:.65rem;
+      transition:transform .3s var(--ease);
+    }
+    .hero__cta:hover .hero__cta-arr { transform:translateY(4px); }
+
+    .hero__scroll {
+      position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
+      z-index:2;
+      opacity:0; animation:kFade 1s var(--ease-o) 2s forwards;
+    }
+    .hero__scroll-line {
+      width:1px; height:46px;
+      background:linear-gradient(to bottom, var(--amber), transparent);
+      animation:kPulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes kUp   { to { opacity:1; transform:translateY(0); } }
+    @keyframes kFade { to { opacity:1; } }
+    @keyframes kPulse {
+      0%,100% { opacity:.35; transform:scaleY(.9); }
+      50%     { opacity:1;   transform:scaleY(1.12) translateY(3px); }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       ABOUT
+    ═══════════════════════════════════════════════════ */
+    .about { background:var(--tuff); }
+
+    .about__grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:5rem;
+      align-items:center;
+    }
+    .about__body {
+      font-size:1rem; color:var(--stone); line-height:1.85;
+      margin-bottom:1.15rem;
+    }
+    .about__pillars {
+      display:grid; grid-template-columns:repeat(3,1fr);
+      margin-top:3rem;
+      border:1px solid var(--stone-dim);
+    }
+    .about__pillar {
+      padding:1.5rem 1rem; text-align:center;
+      border-right:1px solid var(--stone-dim);
+    }
+    .about__pillar:last-child { border-right:none; }
+    .about__pillar-val {
+      display:block;
+      font-family:var(--ff-d); font-weight:600;
+      font-size:1.55rem; color:var(--amber);
+      letter-spacing:.04em; margin-bottom:.3rem;
+    }
+    .about__pillar-label {
+      font-size:.58rem; font-weight:500;
+      letter-spacing:.2em; text-transform:uppercase; color:var(--stone);
+    }
+
+    /* Photo frame */
+    .about__visual { position:relative; }
+    .about__frame {
+      position:relative; overflow:hidden;
+      border:1px solid var(--stone-dim);
+    }
+    .about__frame::after {
+      content:''; position:absolute; inset:0; z-index:1;
+      background:linear-gradient(to bottom, transparent 55%, rgba(22,18,16,.78) 100%);
+      pointer-events:none;
+    }
+    .about__frame img {
+      width:100%; height:530px; object-fit:cover;
+      transition:transform .7s var(--ease);
+    }
+    .about__frame:hover img { transform:scale(1.04); }
+    .about__caption {
+      position:absolute; bottom:1.5rem; left:1.5rem; right:1.5rem;
+      z-index:2;
+      font-family:var(--ff-d); font-style:italic; font-weight:300;
+      font-size:1rem; color:var(--parchment); line-height:1.45;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       MENU
+    ═══════════════════════════════════════════════════ */
+    .menu-sec { background:var(--navy); }
+
+    .menu-sec__header { text-align:center; margin-bottom:4rem; }
+    .menu-sec__header .sec__rule { margin:1.5rem auto; }
+
+    /* Tabs */
+    .menu-sec__tabs {
+      display:flex; justify-content:center; flex-wrap:wrap; gap:0;
+      margin-bottom:3.5rem;
+      border-bottom:1px solid var(--stone-dim);
+    }
+    .menu-sec__tab {
+      background:none; border:none;
+      border-bottom:2px solid transparent;
+      margin-bottom:-1px;
+      font-family:var(--ff-b); font-size:.63rem; font-weight:500;
+      letter-spacing:.25em; text-transform:uppercase;
+      color:var(--stone); padding:.95rem 1.9rem;
+      transition:color .25s, border-color .25s;
+    }
+    .menu-sec__tab:hover { color:var(--parchment); }
+    .menu-sec__tab.is-on { color:var(--amber); border-bottom-color:var(--amber); }
+
+    /* Grid */
+    .menu-sec__grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem;
+      min-height:280px;
+      opacity:1; transform:translateY(0);
+      transition:opacity .32s var(--ease), transform .32s var(--ease);
+    }
+    .menu-sec__grid.is-out {
+      opacity:0; transform:translateY(10px);
+    }
+    .menu-sec__empty {
+      grid-column:1/-1; text-align:center;
+      font-family:var(--ff-d); font-style:italic;
+      color:var(--stone); font-size:1.15rem; padding:4rem 0;
+    }
+
+    /* Cards */
+    .menu-card {
+      background:var(--tuff);
+      border:1px solid var(--stone-dim);
+      overflow:hidden;
+      transition:border-color .3s, transform .4s var(--ease);
+    }
+    .menu-card:hover { border-color:var(--amber-dim); transform:translateY(-5px); }
+    .menu-card__img { width:100%; height:240px; overflow:hidden; }
+    .menu-card__img img {
+      width:100%; height:100%; object-fit:cover;
+      transition:transform .6s var(--ease);
+    }
+    .menu-card:hover .menu-card__img img { transform:scale(1.07); }
+    .menu-card__body { padding:1.2rem 1.3rem 1.45rem; }
+    .menu-card__name {
+      font-family:var(--ff-d); font-weight:600;
+      font-size:1.1rem; color:var(--parchment);
+      line-height:1.3; margin-bottom:.5rem;
+    }
+    .menu-card__line {
+      width:28px; height:1px;
+      background:var(--amber-dim);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       BOAT SERVICE
+    ═══════════════════════════════════════════════════ */
+    .boat { background:var(--night); position:relative; overflow:hidden; }
+    .boat__texture {
+      position:absolute; inset:0; pointer-events:none;
+      background-image:url('images/gallery/05.jpg');
+      background-size:cover; background-position:center;
+      opacity:.055;
+    }
+    .boat__grid {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:5rem; align-items:center; position:relative;
+    }
+
+    @keyframes kFloat {
+      0%,100% { transform:translateY(0); }
+      50%      { transform:translateY(-18px); }
+    }
+    @keyframes kWave {
+      0%,100% { transform:translateX(0) scaleX(1);   opacity:.85; }
+      50%      { transform:translateX(-20px) scaleX(.78); opacity:.35; }
+    }
+
+    .boat__visual {
+      display:flex; justify-content:center;
+      align-items:center; padding:2rem 0;
+    }
+    .boat__visual-inner { position:relative; text-align:center; }
+    .boat__float {
+      animation:kFloat 5.5s ease-in-out infinite;
+      will-change:transform;
+    }
+    .boat__icon {
+      font-size:6.5rem; color:var(--amber); opacity:.7; line-height:1;
+    }
+    .boat__waves {
+      margin-top:2rem;
+      display:flex; flex-direction:column; gap:.65rem;
+    }
+    .boat__wave {
+      height:2px; border-radius:999px;
+      background:linear-gradient(90deg,
+        transparent 0%, var(--amber-dim) 30%,
+        var(--amber) 50%, var(--amber-dim) 70%, transparent 100%);
+      animation:kWave 3.8s ease-in-out infinite;
+      will-change:transform;
+    }
+    .boat__wave:nth-child(2) { width:72%; margin:0 auto; animation-delay:.6s; }
+    .boat__wave:nth-child(3) { width:44%; margin:0 auto; animation-delay:1.2s; opacity:.5; }
+
+    .boat__surcharge {
+      display:inline-flex; align-items:center; gap:1.4rem;
+      margin-top:2.8rem; padding:1.2rem 1.9rem;
+      border:1px solid var(--stone-dim);
+      background:rgba(200,146,42,.04);
+    }
+    .boat__surcharge-val {
+      font-family:var(--ff-d); font-weight:700;
+      font-size:2.6rem; color:var(--amber); line-height:1;
+    }
+    .boat__surcharge-lbl {
+      font-size:.57rem; font-weight:500;
+      letter-spacing:.18em; text-transform:uppercase;
+      color:var(--stone); line-height:1.9;
+    }
+    .boat__quote {
+      display:inline-block; margin-top:2.8rem;
+      font-family:var(--ff-d); font-style:italic;
+      font-size:1.1rem; color:var(--stone);
+      border-left:2px solid var(--amber-dim);
+      padding-left:1.2rem; line-height:1.65;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       GALLERY
+    ═══════════════════════════════════════════════════ */
+    .gal { background:var(--tuff); }
+    .gal__header { text-align:center; margin-bottom:3.5rem; }
+    .gal__header .sec__rule { margin:1.5rem auto; }
+
+    .gal__grid { columns:3 260px; column-gap:1rem; }
+    .gal__item {
+      break-inside:avoid; margin-bottom:1rem;
+      position:relative; overflow:hidden; cursor:pointer;
+    }
+    .gal__item::after {
+      content:''; position:absolute; inset:0;
+      background:rgba(13,11,9,.5); opacity:0;
+      transition:opacity .32s var(--ease); pointer-events:none;
+    }
+    .gal__item:hover::after { opacity:1; }
+    .gal__zoom {
+      position:absolute; inset:0; z-index:1;
+      display:flex; align-items:center; justify-content:center;
+      color:var(--parchment); font-size:1.2rem;
+      opacity:0; transform:scale(.8);
+      transition:opacity .32s var(--ease), transform .32s var(--ease);
+      pointer-events:none;
+    }
+    .gal__item:hover .gal__zoom { opacity:1; transform:scale(1); }
+    .gal__item img {
+      width:100%; display:block;
+      transition:transform .55s var(--ease);
+    }
+    .gal__item:hover img { transform:scale(1.06); }
+
+    .gal__footer {
+      text-align:center; margin-top:2.8rem;
+      padding-top:2.5rem; border-top:1px solid var(--stone-dim);
+    }
+    .gal__ig {
+      display:inline-flex; align-items:center; gap:.8rem;
+      font-size:.62rem; font-weight:500;
+      letter-spacing:.28em; text-transform:uppercase; color:var(--stone);
+      transition:color .25s;
+    }
+    .gal__ig:hover { color:var(--amber); }
+    .gal__ig i:first-child { font-size:1.05rem; }
+
+    /* LIGHTBOX */
+    .lb {
+      position:fixed; inset:0; z-index:9999;
+      background:rgba(10,8,7,.97);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      transition:opacity .28s var(--ease);
+    }
+    .lb.is-open { opacity:1; pointer-events:all; }
+    .lb__img {
+      max-width:90vw; max-height:86vh; object-fit:contain;
+      transform:scale(.94);
+      transition:transform .35s var(--ease-o), opacity .18s;
+      user-select:none;
+    }
+    .lb.is-open .lb__img { transform:scale(1); }
+    .lb__btn {
+      position:absolute; z-index:2;
+      background:none; border:none;
+      color:rgba(232,220,200,.45); font-size:1.35rem;
+      padding:1.2rem; line-height:1;
+      transition:color .2s, transform .22s;
+    }
+    .lb__btn:hover { color:var(--amber); }
+    .lb__close { top:1.2rem; right:1.2rem; }
+    .lb__prev  { left:1.2rem;  top:50%; transform:translateY(-50%); }
+    .lb__next  { right:1.2rem; top:50%; transform:translateY(-50%); }
+    .lb__prev:hover { transform:translateY(-50%) translateX(-4px); }
+    .lb__next:hover { transform:translateY(-50%) translateX(4px);  }
+    .lb__counter {
+      position:absolute; bottom:1.6rem; left:50%; transform:translateX(-50%);
+      font-size:.57rem; letter-spacing:.3em; color:rgba(154,138,114,.65);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       REVIEWS — TRIPADVISOR
+    ═══════════════════════════════════════════════════ */
+    .rev { background:var(--navy); }
+    .rev__header { text-align:center; margin-bottom:3.5rem; }
+    .rev__header .sec__rule { margin:1.5rem auto; }
+
+    .ta-badge {
+      display:inline-flex; flex-direction:column; align-items:center;
+      gap:.5rem; margin-bottom:3.5rem;
+      padding:2rem 3.5rem;
+      border:1px solid var(--stone-dim);
+      background:rgba(200,146,42,.04);
+    }
+    .ta-badge__score {
+      font-family:var(--ff-d); font-weight:700;
+      font-size:4rem; color:var(--amber); line-height:1; letter-spacing:-.02em;
+    }
+    .ta-badge__stars { color:var(--amber); font-size:1rem; letter-spacing:.12em; }
+    .ta-badge__meta {
+      font-size:.57rem; font-weight:500;
+      letter-spacing:.18em; text-transform:uppercase;
+      color:var(--stone); text-align:center; line-height:2.1;
+    }
+
+    .rev__grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem;
+      margin-bottom:3.5rem;
+    }
+    .rev__card {
+      background:var(--tuff); border:1px solid var(--stone-dim);
+      padding:2rem 2rem 2.2rem;
+      transition:border-color .3s;
+    }
+    .rev__card:hover { border-color:var(--amber-dim); }
+    .rev__stars { color:var(--amber); font-size:.75rem; letter-spacing:.08em; margin-bottom:.9rem; }
+    .rev__q { font-family:var(--ff-d); font-size:3rem; color:var(--amber-dim); line-height:.8; margin-bottom:.6rem; }
+    .rev__text {
+      font-family:var(--ff-d); font-style:italic; font-weight:300;
+      font-size:1.05rem; color:var(--parchment);
+      line-height:1.75; margin-bottom:1.6rem;
+    }
+    .rev__author { display:flex; align-items:center; gap:.7rem; }
+    .rev__author-rule { width:20px; height:1px; background:var(--amber-dim); }
+    .rev__author-name {
+      font-size:.57rem; font-weight:500;
+      letter-spacing:.18em; text-transform:uppercase; color:var(--stone);
+    }
+
+    .rev__cta { text-align:center; }
+    .rev__cta a {
+      display:inline-flex; align-items:center; gap:.8rem;
+      font-size:.62rem; font-weight:500;
+      letter-spacing:.25em; text-transform:uppercase; color:var(--stone);
+      border-bottom:1px solid var(--stone-dim); padding-bottom:.35rem;
+      transition:color .25s, border-color .25s;
+    }
+    .rev__cta a:hover { color:var(--amber); border-color:var(--amber); }
+
+    /* ═══════════════════════════════════════════════════
+       CONTACT + MAP
+    ═══════════════════════════════════════════════════ */
+    .contact { background:var(--tuff); }
+    .contact__grid {
+      display:grid; grid-template-columns:1fr 1.35fr;
+      gap:5rem; align-items:start;
+    }
+    .contact__block { margin-bottom:2.4rem; }
+    .contact__block-title {
+      font-size:.57rem; font-weight:500;
+      letter-spacing:.25em; text-transform:uppercase;
+      color:var(--amber); margin-bottom:.85rem;
+    }
+    .contact__row {
+      display:flex; align-items:flex-start; gap:.8rem;
+      color:var(--stone); font-size:.93rem;
+      margin-bottom:.5rem; line-height:1.55;
+    }
+    .contact__row i { color:var(--amber-dim); min-width:15px; margin-top:3px; font-size:.82rem; }
+    .contact__row a { transition:color .2s; }
+    .contact__row a:hover { color:var(--parchment); }
+
+    .hours { width:100%; border-collapse:collapse; }
+    .hours tr { border-bottom:1px solid rgba(62,52,44,.45); }
+    .hours tr:last-child { border-bottom:none; }
+    .hours td { padding:.38rem 0; font-size:.9rem; color:var(--stone); }
+    .hours td:first-child { color:var(--parchment); }
+    .hours td:last-child  { color:var(--amber-dim); text-align:right; }
+
+    .socials { display:flex; gap:.85rem; margin-top:1.4rem; }
+    .socials__a {
+      display:flex; align-items:center; justify-content:center;
+      width:40px; height:40px;
+      border:1px solid var(--stone-dim); color:var(--stone);
+      font-size:.88rem; transition:color .25s, border-color .25s;
+    }
+    .socials__a:hover { color:var(--amber); border-color:var(--amber); }
+
+    .contact__map iframe {
+      width:100%; height:430px; display:block;
+      filter:grayscale(35%) brightness(.9) contrast(1.06);
+      border:1px solid var(--stone-dim);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════ */
+    .foot {
+      background:var(--night);
+      border-top:1px solid var(--stone-dim);
+      padding:3.5rem 0 3rem;
+    }
+    .foot__inner {
+      max-width:1200px; margin:0 auto; padding:0 2.5rem;
+      display:grid; grid-template-columns:1fr auto 1fr;
+      align-items:center; gap:2rem;
+    }
+    .foot__brand {
+      font-family:var(--ff-d); font-weight:600;
+      font-size:1.2rem; color:var(--parchment);
+    }
+    .foot__sub {
+      font-size:.54rem; font-weight:400;
+      letter-spacing:.22em; text-transform:uppercase;
+      color:var(--stone); margin-top:.2rem;
+    }
+    .foot__copy {
+      font-size:.6rem; color:var(--stone);
+      letter-spacing:.06em; text-align:center; line-height:1.9;
+    }
+    .foot__right {
+      display:flex; flex-direction:column;
+      align-items:flex-end; gap:.85rem;
+    }
+    .foot__socials { display:flex; gap:.85rem; }
+    .foot__socials a { font-size:.9rem; color:var(--stone); transition:color .25s; }
+    .foot__socials a:hover { color:var(--amber); }
+    .foot__credit {
+      font-size:.53rem; color:var(--stone-dim); letter-spacing:.06em;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════ */
+    @media (max-width:1024px) {
+      .menu-sec__grid { grid-template-columns:repeat(2,1fr); }
+      .rev__grid      { grid-template-columns:repeat(2,1fr); }
+    }
+    @media (max-width:900px) {
+      .boat__grid { grid-template-columns:1fr; gap:3rem; }
+      .boat__visual { order:-1; }
+    }
+    @media (max-width:860px) {
+      .about__grid    { grid-template-columns:1fr; gap:3rem; }
+      .about__visual  { order:-1; }
+      .about__frame img { height:360px; }
+      .contact__grid  { grid-template-columns:1fr; gap:3rem; }
+      .foot__inner    { grid-template-columns:1fr; text-align:center; }
+      .foot__right    { align-items:center; }
+    }
+    @media (max-width:768px) {
+      .nav { padding:1.25rem 1.25rem; }
+      .sec { padding:5rem 0; }
+      .sec__inner { padding:0 1.5rem; }
+      .menu-sec__grid { grid-template-columns:repeat(2,1fr); }
+      .menu-sec__tab  { padding:.85rem 1.1rem; }
+      .gal__grid  { columns:2 200px; }
+      .rev__grid  { grid-template-columns:1fr; }
+    }
+    @media (max-width:520px) {
+      .hero__name { letter-spacing:.03em; }
+      .menu-sec__grid  { grid-template-columns:1fr; }
+      .about__pillars  { grid-template-columns:1fr; }
+      .about__pillar   { border-right:none; border-bottom:1px solid var(--stone-dim); }
+      .about__pillar:last-child { border-bottom:none; }
+      .gal__grid       { columns:1; }
+      .ta-badge        { padding:1.5rem 2rem; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after {
+        animation-duration:.01ms !important;
+        animation-delay:.01ms !important;
+        transition-duration:.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCROLL PROGRESS -->
+  <div class="sp" aria-hidden="true"><div class="sp__bar" id="spBar"></div></div>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" id="nav" role="navigation">
+    <a href="#home" class="nav__brand">Porto Vecchio</a>
+    <div class="lang" role="group" aria-label="Lingua / Language">
+      <button class="lang__btn is-on" id="btnIT" onclick="setLang('it')">IT</button>
+      <span class="lang__sep" aria-hidden="true">|</span>
+      <button class="lang__btn" id="btnEN"  onclick="setLang('en')">EN</button>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 1 — HERO
+  ═══════════════════════════════════════════ -->
+  <section class="hero" id="home">
+    <div class="hero__bg"  id="heroBg"></div>
+    <div class="hero__over" aria-hidden="true"></div>
+    <div class="hero__vig"  aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <p class="hero__eye"
+         data-it="Ventotene · Lazio · Italia"
+         data-en="Ventotene · Lazio · Italy">
+        Ventotene · Lazio · Italia
+      </p>
+
+      <h1 class="hero__name">Porto Vecchio</h1>
+
+      <div class="hero__deco" aria-hidden="true">
+        <div class="hero__deco-line"></div>
+        <div class="hero__deco-gem"></div>
+        <div class="hero__deco-line"></div>
+      </div>
+
+      <p class="hero__tag"
+         data-it="Scolpito nella roccia di tufo.<br>Da duemila anni, sul porto di Ventotene."
+         data-en="Carved into tuff rock.<br>Two thousand years on Ventotene's ancient port.">
+        Scolpito nella roccia di tufo.<br>
+        Da duemila anni, sul porto di Ventotene.
+      </p>
+
+      <a href="#about" class="hero__cta">
+        <span data-it="Scopri" data-en="Discover">Scopri</span>
+        <span class="hero__cta-arr" aria-hidden="true">↓</span>
+      </a>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 2 — ABOUT
+  ═══════════════════════════════════════════ -->
+  <section class="about sec" id="about">
+    <div class="sec__inner">
+      <div class="about__grid">
+
+        <!-- Text column -->
+        <div>
+          <span class="sec__eyebrow reveal"
+                data-it="La nostra storia · Chi siamo"
+                data-en="Our story · Who we are">
+            La nostra storia · Chi siamo
+          </span>
+
+          <h2 class="sec__heading reveal"
+              data-it="Non un locale<br>sul porto.<br>Il porto<br>è il locale."
+              data-en="Not a place<br>on the port.<br>The port<br>is the place.">
+            Non un locale<br>sul porto.<br>Il porto<br>è il locale.
+          </h2>
+
+          <div class="sec__rule reveal"></div>
+
+          <p class="about__body reveal"
+             data-it="Il porto romano di Ventotene risale al I secolo avanti Cristo. Scavato direttamente nella roccia di tufo vulcanico per volere dell'imperatore Augusto, è uno dei porti naturali più antichi e meglio conservati del Mediterraneo."
+             data-en="Ventotene's Roman port dates back to the 1st century BC. Carved directly into volcanic tuff rock on the orders of Emperor Augustus, it is one of the oldest and best-preserved natural harbours in the Mediterranean.">
+            Il porto romano di Ventotene risale al I secolo avanti Cristo. Scavato direttamente nella roccia di tufo vulcanico per volere dell'imperatore Augusto, è uno dei porti naturali più antichi e meglio conservati del Mediterraneo.
+          </p>
+
+          <p class="about__body reveal"
+             data-it="Porto Vecchio non si affaccia sul porto — ne fa parte. Le nostre pareti sono la roccia. Il soffitto è un arco millenario. Il profumo è quello del mare aperto e della pietra antica."
+             data-en="Porto Vecchio doesn't overlook the port — it is part of it. Our walls are the rock. Our ceiling is a thousand-year arch. The scent is open sea and ancient stone.">
+            Porto Vecchio non si affaccia sul porto — ne fa parte. Le nostre pareti sono la roccia. Il soffitto è un arco millenario. Il profumo è quello del mare aperto e della pietra antica.
+          </p>
+
+          <!-- Three-pillar stats -->
+          <div class="about__pillars stagger">
+            <div class="about__pillar reveal">
+              <span class="about__pillar-val">I sec.</span>
+              <span class="about__pillar-label"
+                    data-it="a.C. · Porto Romano"
+                    data-en="BC · Roman Port">
+                a.C. · Porto Romano
+              </span>
+            </div>
+            <div class="about__pillar reveal">
+              <span class="about__pillar-val">Tufo</span>
+              <span class="about__pillar-label"
+                    data-it="Roccia viva · Struttura"
+                    data-en="Living rock · Structure">
+                Roccia viva · Struttura
+              </span>
+            </div>
+            <div class="about__pillar reveal">
+              <span class="about__pillar-val">06–24</span>
+              <span class="about__pillar-label"
+                    data-it="Dalla colazione al tramonto"
+                    data-en="From breakfast to sunset">
+                Dalla colazione al tramonto
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo column -->
+        <div class="about__visual reveal from-right">
+          <div class="about__frame">
+            <img id="aboutImg" src="" alt="Il tufo del porto romano di Ventotene" loading="lazy">
+            <p class="about__caption"
+               data-it="L'arco di tufo scavato dai Romani. La nostra casa da duemila anni."
+               data-en="The tuff arch carved by the Romans. Our home for two thousand years.">
+              L'arco di tufo scavato dai Romani. La nostra casa da duemila anni.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 3 — MENU
+  ═══════════════════════════════════════════ -->
+  <section class="menu-sec sec" id="menu">
+    <div class="sec__inner">
+
+      <div class="menu-sec__header">
+        <span class="sec__eyebrow reveal"
+              data-it="Cucina di mare · Prodotti dell'isola"
+              data-en="Seafood kitchen · Island produce">
+          Cucina di mare · Prodotti dell'isola
+        </span>
+        <h2 class="sec__heading reveal"
+            data-it="Dal porto alla tavola"
+            data-en="From port to table">
+          Dal porto alla tavola
+        </h2>
+        <div class="sec__rule reveal"></div>
+      </div>
+
+      <!-- Tabs — built by JS -->
+      <div class="menu-sec__tabs" id="menuTabs"></div>
+
+      <!-- Cards — built by JS -->
+      <div class="menu-sec__grid" id="menuGrid"></div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 4 — BOAT SERVICE
+  ═══════════════════════════════════════════ -->
+  <section class="boat sec" id="boat-service">
+    <div class="boat__texture" aria-hidden="true"></div>
+    <div class="sec__inner">
+      <div class="boat__grid">
+
+        <div>
+          <span class="sec__eyebrow reveal"
+                data-it="Servizio esclusivo · Unico sull'isola"
+                data-en="Exclusive service · Unique on the island">
+            Servizio esclusivo · Unico sull'isola
+          </span>
+          <h2 class="sec__heading reveal"
+              data-it="Vi raggiungiamo<br>direttamente<br>in barca."
+              data-en="We come to you<br>directly<br>on the water.">
+            Vi raggiungiamo<br>direttamente<br>in barca.
+          </h2>
+          <div class="sec__rule reveal"></div>
+          <p class="about__body reveal"
+             data-it="Ormeggiati nel porto romano e non volete lasciare la barca? Nessun problema. Porto Vecchio è l'unico locale di Ventotene che porta cibo e bevande direttamente a bordo — dal caffè del mattino al cocktail del tramonto."
+             data-en="Moored in the Roman port and don't want to leave the boat? No problem. Porto Vecchio is the only place on the island that brings food and drinks directly on board — from your morning coffee to your sunset cocktail.">
+            Ormeggiati nel porto romano e non volete lasciare la barca? Nessun problema. Porto Vecchio è l'unico locale di Ventotene che porta cibo e bevande direttamente a bordo — dal caffè del mattino al cocktail del tramonto.
+          </p>
+          <div class="boat__surcharge reveal">
+            <span class="boat__surcharge-val">€2</span>
+            <div>
+              <p class="boat__surcharge-lbl"
+                 data-it="Supplemento consegna a bordo<br>Chiamateci o ordinate al bancone"
+                 data-en="On-board delivery supplement<br>Call us or order at the bar">
+                Supplemento consegna a bordo<br>
+                Chiamateci o ordinate al bancone
+              </p>
+            </div>
+          </div>
+          <p class="boat__quote reveal"
+             data-it="L'unico servizio del genere sull'isola di Ventotene."
+             data-en="The only service of its kind on the island of Ventotene.">
+            L'unico servizio del genere sull'isola di Ventotene.
+          </p>
+        </div>
+
+        <div class="boat__visual reveal from-right">
+          <div class="boat__visual-inner">
+            <div class="boat__float">
+              <div class="boat__icon">
+                <i class="fa-solid fa-anchor"></i>
+              </div>
+            </div>
+            <div class="boat__waves">
+              <div class="boat__wave"></div>
+              <div class="boat__wave"></div>
+              <div class="boat__wave"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 5 — GALLERY
+  ═══════════════════════════════════════════ -->
+  <section class="gal sec" id="gallery-sec">
+    <div class="sec__inner">
+
+      <div class="gal__header">
+        <span class="sec__eyebrow reveal"
+              data-it="Il posto · Le persone · I piatti"
+              data-en="The place · The people · The dishes">
+          Il posto · Le persone · I piatti
+        </span>
+        <h2 class="sec__heading reveal"
+            data-it="Galleria"
+            data-en="Gallery">
+          Galleria
+        </h2>
+        <div class="sec__rule reveal"></div>
+      </div>
+
+      <div class="gal__grid" id="galGrid"></div>
+
+      <div class="gal__footer">
+        <a href="https://www.instagram.com/portovecchio_ventotene_ristoro"
+           target="_blank" rel="noopener"
+           class="gal__ig reveal">
+          <i class="fa-brands fa-instagram"></i>
+          <span data-it="Altre foto su Instagram"
+                data-en="More photos on Instagram">
+            Altre foto su Instagram
+          </span>
+          <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:.48rem"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lb" id="lb" role="dialog" aria-modal="true">
+    <img class="lb__img" id="lbImg" src="" alt="">
+    <button class="lb__btn lb__close" id="lbClose" aria-label="Chiudi">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <button class="lb__btn lb__prev" id="lbPrev" aria-label="Foto precedente">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <button class="lb__btn lb__next" id="lbNext" aria-label="Foto successiva">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+    <span class="lb__counter" id="lbCounter" aria-live="polite"></span>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 6 — SOCIAL PROOF
+  ═══════════════════════════════════════════ -->
+  <section class="rev sec" id="reviews">
+    <div class="sec__inner">
+
+      <div class="rev__header">
+        <span class="sec__eyebrow reveal"
+              data-it="Cosa dicono i nostri ospiti"
+              data-en="What our guests say">
+          Cosa dicono i nostri ospiti
+        </span>
+        <h2 class="sec__heading reveal"
+            data-it="287 recensioni<br>su TripAdvisor"
+            data-en="287 reviews<br>on TripAdvisor">
+          287 recensioni<br>su TripAdvisor
+        </h2>
+        <div class="sec__rule reveal"></div>
+
+        <div class="ta-badge reveal">
+          <span class="ta-badge__score">4.2</span>
+          <span class="ta-badge__stars">★★★★☆</span>
+          <span class="ta-badge__meta"
+                data-it="#5 su 21 ristoranti a Ventotene<br>287 recensioni verificate"
+                data-en="#5 of 21 restaurants in Ventotene<br>287 verified reviews">
+            #5 su 21 ristoranti a Ventotene<br>287 recensioni verificate
+          </span>
+        </div>
+      </div>
+
+      <!-- Replace with real TripAdvisor quotes when ready -->
+      <div class="rev__grid stagger">
+
+        <div class="rev__card reveal">
+          <div class="rev__stars">★★★★★</div>
+          <div class="rev__q">"</div>
+          <p class="rev__text"
+             data-it="Posto unico sull'isola. Siamo arrivati in barca e ci hanno servito direttamente a bordo — caffè, colazione, tutto. La posizione nel porto romano è straordinaria."
+             data-en="Unique spot on the island. We arrived by boat and they served us directly on board — coffee, breakfast, everything. The Roman port setting is extraordinary.">
+            Posto unico sull'isola. Siamo arrivati in barca e ci hanno servito direttamente a bordo — caffè, colazione, tutto. La posizione nel porto romano è straordinaria.
+          </p>
+          <div class="rev__author">
+            <div class="rev__author-rule"></div>
+            <span class="rev__author-name">Marco T. · Milano</span>
+          </div>
+        </div>
+
+        <div class="rev__card reveal">
+          <div class="rev__stars">★★★★★</div>
+          <div class="rev__q">"</div>
+          <p class="rev__text"
+             data-it="Il polpo era fantastico — freschissimo, cotto alla perfezione. Il locale nel tufo ti fa sentire in un altro tempo. Il soffitto a volta è qualcosa che non si dimentica."
+             data-en="The octopus was fantastic — incredibly fresh, perfectly cooked. The tuff rock venue takes you back in time. The vaulted ceiling is something you don't forget.">
+            Il polpo era fantastico — freschissimo, cotto alla perfezione. Il locale nel tufo ti fa sentire in un altro tempo. Il soffitto a volta è qualcosa che non si dimentica.
+          </p>
+          <div class="rev__author">
+            <div class="rev__author-rule"></div>
+            <span class="rev__author-name">Claudia R. · Roma</span>
+          </div>
+        </div>
+
+        <div class="rev__card reveal">
+          <div class="rev__stars">★★★★☆</div>
+          <div class="rev__q">"</div>
+          <p class="rev__text"
+             data-it="Vista sul porto romano, pesce freschissimo e personale gentilissimo. I paccheri alla bisque di scampi — un livello sopra la media. Uno dei migliori pranzi dell'estate."
+             data-en="View over the Roman port, incredibly fresh fish and wonderful staff. The paccheri with scampi bisque — above average by far. One of the best lunches of the summer.">
+            Vista sul porto romano, pesce freschissimo e personale gentilissimo. I paccheri alla bisque di scampi — un livello sopra la media. Uno dei migliori pranzi dell'estate.
+          </p>
+          <div class="rev__author">
+            <div class="rev__author-rule"></div>
+            <span class="rev__author-name">Stefano M. · Napoli</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="rev__cta">
+        <!-- Update with actual TripAdvisor URL -->
+        <a href="https://www.tripadvisor.it/Search?q=porto+vecchio+bar+ristorante+ventotene"
+           target="_blank" rel="noopener" class="reveal">
+          <i class="fa-brands fa-tripadvisor"></i>
+          <span data-it="Leggi tutte le recensioni su TripAdvisor"
+                data-en="Read all reviews on TripAdvisor">
+            Leggi tutte le recensioni su TripAdvisor
+          </span>
+          <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:.48rem"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECTION 7 — CONTACT + HOURS + MAP
+  ═══════════════════════════════════════════ -->
+  <section class="contact sec" id="contact">
+    <div class="sec__inner">
+      <div class="contact__grid">
+
+        <div>
+          <span class="sec__eyebrow reveal"
+                data-it="Dove siamo · Orari · Contatti"
+                data-en="Find us · Hours · Contacts">
+            Dove siamo · Orari · Contatti
+          </span>
+          <h2 class="sec__heading reveal"
+              data-it="Vieni a trovarci"
+              data-en="Come find us">
+            Vieni a trovarci
+          </h2>
+          <div class="sec__rule reveal"></div>
+
+          <div class="contact__block reveal">
+            <p class="contact__block-title"
+               data-it="Indirizzo" data-en="Address">Indirizzo</p>
+            <div class="contact__row">
+              <i class="fa-solid fa-location-dot"></i>
+              <span>Via Porto Romano 20/22<br>Ventotene (LT) · Lazio, Italia</span>
+            </div>
+          </div>
+
+          <div class="contact__block reveal">
+            <p class="contact__block-title"
+               data-it="Orari" data-en="Hours">Orari</p>
+            <table class="hours">
+              <tr>
+                <td data-it="Tutti i giorni" data-en="Every day">Tutti i giorni</td>
+                <td>06:00 – 24:00</td>
+              </tr>
+              <tr>
+                <td data-it="Colazione" data-en="Breakfast">Colazione</td>
+                <td>06:00 – 11:00</td>
+              </tr>
+              <tr>
+                <td data-it="Pranzo" data-en="Lunch">Pranzo</td>
+                <td>12:00 – 15:30</td>
+              </tr>
+              <tr>
+                <td data-it="Cena" data-en="Dinner">Cena</td>
+                <td>19:00 – 23:00</td>
+              </tr>
+              <tr>
+                <td>Bar</td>
+                <td data-it="Tutto il giorno" data-en="All day">Tutto il giorno</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="contact__block reveal">
+            <p class="contact__block-title"
+               data-it="Telefono" data-en="Phone">Telefono</p>
+            <div class="contact__row">
+              <i class="fa-solid fa-phone"></i>
+              <a href="tel:+393454533201">+39 345 453 3201</a>
+            </div>
+            <div class="contact__row">
+              <i class="fa-solid fa-phone"></i>
+              <a href="tel:+39077185041">+39 0771 85041</a>
+            </div>
+          </div>
+
+          <div class="contact__block reveal">
+            <p class="contact__block-title">Email</p>
+            <div class="contact__row">
+              <i class="fa-solid fa-envelope"></i>
+              <a href="mailto:info@ristorantebarportovecchioventotene.com"
+                 style="word-break:break-all; font-size:.82rem;">
+                info@ristorantebarportovecchioventotene.com
+              </a>
+            </div>
+          </div>
+
+          <div class="contact__block reveal">
+            <p class="contact__block-title">Social</p>
+            <div class="socials">
+              <a href="https://facebook.com/barportovecchio"
+                 target="_blank" rel="noopener"
+                 class="socials__a" aria-label="Facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+              </a>
+              <a href="https://www.instagram.com/portovecchio_ventotene_ristoro"
+                 target="_blank" rel="noopener"
+                 class="socials__a" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+              </a>
+              <a href="https://www.tripadvisor.it/Search?q=porto+vecchio+bar+ristorante+ventotene"
+                 target="_blank" rel="noopener"
+                 class="socials__a" aria-label="TripAdvisor">
+                <i class="fa-brands fa-tripadvisor"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact__map reveal from-right">
+          <iframe
+            src="https://maps.google.com/maps?q=Porto+Vecchio+Bar+Ristorante+Ventotene+LT+Italy&t=&z=16&ie=UTF8&iwloc=&output=embed"
+            title="Porto Vecchio — Ventotene"
+            allowfullscreen loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="foot" id="footer">
+    <div class="foot__inner">
+      <div>
+        <p class="foot__brand">Porto Vecchio</p>
+        <p class="foot__sub">Ristorante · Bar · Ventotene</p>
+      </div>
+      <p class="foot__copy">
+        Via Porto Romano 20/22 · Ventotene (LT)<br>
+        <span data-it="© 2025 Porto Vecchio. Tutti i diritti riservati."
+              data-en="© 2025 Porto Vecchio. All rights reserved.">
+          © 2025 Porto Vecchio. Tutti i diritti riservati.
+        </span>
+      </p>
+      <div class="foot__right">
+        <div class="foot__socials">
+          <a href="https://facebook.com/barportovecchio"
+             target="_blank" rel="noopener" aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+          <a href="https://www.instagram.com/portovecchio_ventotene_ristoro"
+             target="_blank" rel="noopener" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://www.tripadvisor.it/Search?q=porto+vecchio+bar+ristorante+ventotene"
+             target="_blank" rel="noopener" aria-label="TripAdvisor">
+            <i class="fa-brands fa-tripadvisor"></i>
+          </a>
+        </div>
+        <span class="foot__credit"
+              data-it="Fatto con cura da un amico"
+              data-en="Made with care by a friend">
+          Fatto con cura da un amico
+        </span>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════
+       MATTERPORT 3D TOUR — HIDDEN PLACEHOLDER
+       ─────────────────────────────────────────
+       Invisible to visitors. To activate:
+         1. Remove style="display:none" below
+         2. Paste Matterport embed URL in src=""
+  ═══════════════════════════════════════════ -->
+  <section id="tour3d" style="display:none;">
+    <!-- ↓ Paste Matterport URL here when ready ↓ -->
+    <!--
+    <iframe
+      src="YOUR_MATTERPORT_URL_HERE"
+      width="100%" height="600"
+      frameborder="0" allowfullscreen
+      allow="xr-spatial-tracking">
+    </iframe>
+    -->
+  </section>
+
+
+  <script>
+  // ╔══════════════════════════════════════════════════════════╗
+  // ║               PHOTO CONFIGURATION                        ║
+  // ║                                                          ║
+  // ║  Edit ONLY this block to change or add photos.          ║
+  // ║  Place files in the /images/ folder structure.          ║
+  // ║  To add a dish: drop the file, add one { } line.        ║
+  // ║  New gallery photo: drop file, add path to gallery[].   ║
+  // ╚══════════════════════════════════════════════════════════╝
+
+  const PHOTOS = {
+
+    // ─ HERO ────────────────────────────────────────────────────
+    // Best port + lighthouse shot. Full viewport background.
+    // File: images/hero.jpg
+    hero: 'images/hero.jpg',
+
+    // ─ ABOUT ───────────────────────────────────────────────────
+    // The tuff vault arch — this is the soul of the story.
+    // File: images/about-1.jpg
+    about: 'images/about-1.jpg',
+
+    // ─ MENU ────────────────────────────────────────────────────
+    menu: {
+
+      antipasti: [
+        { src: 'images/menu/antipasti/01.jpg', it: 'Polpo su Lenticchie e Crema',   en: 'Octopus on Lentils & Cream'  },
+        { src: 'images/menu/antipasti/02.jpg', it: 'Tartara di Granchio',            en: 'Crab Tartare'                },
+        { src: 'images/menu/antipasti/03.jpg', it: 'Gamberi Rossi Crudi',            en: 'Raw Red Prawns'              },
+        { src: 'images/menu/antipasti/04.jpg', it: 'Polpo su Crema di Patate',       en: 'Octopus on Potato Cream'     },
+        { src: 'images/menu/antipasti/05.jpg', it: 'Tentacolo di Polpo Grigliato',   en: 'Grilled Octopus Tentacle'    },
+        // ← add antipasto here
+      ],
+
+      primi: [
+        { src: 'images/menu/primi/01.jpg', it: 'Paccheri alla Bisque di Scampi',  en: 'Paccheri with Scampi Bisque' },
+        { src: 'images/menu/primi/02.jpg', it: 'Spaghetti ai Frutti di Mare',     en: 'Spaghetti with Seafood'      },
+        // ← add primo here
+      ],
+
+      secondi: [
+        { src: 'images/menu/secondi/01.jpg', it: 'Trancio di Tonno alla Griglia', en: 'Grilled Tuna Steak'    },
+        { src: 'images/menu/secondi/02.jpg', it: 'Grigliata di Pesce Misto',      en: 'Mixed Grilled Fish'    },
+        { src: 'images/menu/secondi/03.jpg', it: 'Grigliata di Mare',             en: 'Seafood Grill'         },
+        // ← add secondo here
+      ],
+
+      insalate: [
+        { src: 'images/menu/insalate/01.jpg', it: 'Insalata di Polpo con Olive e Pomodorini', en: 'Octopus Salad, Olives & Tomato' },
+        // ← add insalata here
+      ],
+
+      drinks: [
+        // EMPTY — add when bar/drinks photos arrive
+        // { src: 'images/menu/drinks/01.jpg', it: 'Nome drink', en: 'Drink name' },
+      ],
+
+    },
+
+    // ─ GALLERY ─────────────────────────────────────────────────
+    // Drop file in images/gallery/ and add a line. Auto-appears.
+    gallery: [
+      'images/gallery/01.jpg',   // Facade daytime
+      'images/gallery/02.jpg',   // Facade + signage close
+      'images/gallery/03.jpg',   // Pavilion from port
+      'images/gallery/04.jpg',   // Terrace dining room
+      'images/gallery/05.jpg',   // Full dining room + guests
+      'images/gallery/06.jpg',   // Golden hour exterior
+      'images/gallery/07.jpg',   // Waterfront lighthouse
+      // ← add gallery photo here
+    ],
+
+  };
+
+
+  // ╔══════════════════════════════════════════════════════════╗
+  // ║               LANGUAGE SYSTEM                            ║
+  // ╚══════════════════════════════════════════════════════════╝
+
+  const TABS = {
+    antipasti: { it: 'Antipasti', en: 'Starters' },
+    primi:     { it: 'Primi',     en: 'First'    },
+    secondi:   { it: 'Secondi',   en: 'Mains'    },
+    insalate:  { it: 'Insalate',  en: 'Salads'   },
+    drinks:    { it: 'Drink',     en: 'Drinks'   },
+  };
+
+  let lang    = 'it';
+  let menuCat = 'antipasti';
+
+  function setLang(l) {
+    lang = l;
+    document.documentElement.lang = l;
+    document.getElementById('btnIT').classList.toggle('is-on', l === 'it');
+    document.getElementById('btnEN').classList.toggle('is-on', l === 'en');
+
+    // Update all static bilingual nodes
+    document.querySelectorAll('[data-it]').forEach(el => {
+      el.innerHTML = l === 'it' ? el.dataset.it : el.dataset.en;
+    });
+
+    // Re-render dynamic sections
+    buildTabs();
+    renderMenu(menuCat);
+  }
+
+
+  // ╔══════════════════════════════════════════════════════════╗
+  // ║               INIT PHOTO SLOTS                           ║
+  // ╚══════════════════════════════════════════════════════════╝
+
+  document.getElementById('heroBg').style.backgroundImage = `url('${PHOTOS.hero}')`;
+  document.getElementById('aboutImg').src = PHOTOS.about;
+
+
+  // ╔══════════════════════════════════════════════════════════╗
+  // ║               MENU ENGINE                                ║
+  // ╚══════════════════════════════════════════════════════════╝
+
+  function buildTabs() {
+    const bar = document.getElementById('menuTabs');
+    bar.innerHTML = Object.entries(PHOTOS.menu)
+      .filter(([, items]) => items.length > 0)
+      .map(([cat]) =>
+        `<button
+          class="menu-sec__tab${cat === menuCat ? ' is-on' : ''}"
+          onclick="switchTab('${cat}')">
+          ${TABS[cat][lang]}
+        </button>`
+      ).join('');
+  }
+
+  function renderMenu(cat) {
+    menuCat = cat;
+    const grid  = document.getElementById('menuGrid');
+    const items = PHOTOS.menu[cat] || [];
+
+    if (!items.length) {
+      grid.innerHTML = `<p class="menu-sec__empty">${lang === 'it' ? 'Prossimamente...' : 'Coming soon...'}</p>`;
+      return;
+    }
+
+    grid.innerHTML = items.map((item, i) =>
+      `<div class="menu-card reveal" style="transition-delay:${(i * 0.08).toFixed(2)}s">
+        <div class="menu-card__img">
+          <img src="${item.src}" alt="${item[lang]}" loading="lazy">
+        </div>
+        <div class="menu-card__body">
+          <p class="menu-card__name">${item[lang]}</p>
+          <div class="menu-card__line"></div>
+        </div>
+      </div>`
+    ).join('');
+
+    // Force paint so initial opacity:0 is applied before observer fires
+    grid.offsetHeight;
+    grid.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+  }
+
+  function switchTab(cat) {
+    menuCat = cat;
+    buildTabs(); // Rebuilds tabs with correct active state
+
+    const grid = document.getElementById('menuGrid');
+    grid.classList.add('is-out');
+
+    setTimeout(() => {
+      renderMenu(cat);
+      grid.classList.remove('is-out');
+    }, 280);
+  }
+
+  // ╔══════════════════════════════════════════════════════════╗
+  // ║               INTERSECTION OBSERVER                      ║
+  // ║   Must be defined BEFORE renderMenu() is called.         ║
+  // ╚══════════════════════════════════════════════════════════╝
+
+  const ro = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-on');
+        ro.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  // Observe all static .reveal elements in the HTML
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+
+  // ╔══════════════════════════════════════════════════════════╗
+  // ║               MENU INIT                                  ║
+  // ╚══════════════════════════════════════════════════════════╝
+
+  buildTabs();
+  renderMenu('antipasti');
+
+
+  // ╔══════════════════════════════════════════════════════════╗
+  // ║               SCROLL EFFECTS (GPU-only)                  ║
+  // ║   parallax · progress bar · nav darken                   ║
+  // ╚══════════════════════════════════════════════════════════╝
+
+  const spBar    = document.getElementById('spBar');
+  const navEl    = document.getElementById('nav');
+  const heroBgEl = document.getElementById('heroBg');
+  const noMotion = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  let   rafBusy  = false;
+
+  window.addEventListener('scroll', () => {
+    if (rafBusy) return;
+    rafBusy = true;
+    requestAnimationFrame(() => {
+      const sy  = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+
+      // Parallax — translateY only, GPU-accelerated
+      if (!noMotion) heroBgEl.style.transform = `translateY(${sy * 0.28}px)`;
+
+      // Progress bar — scaleX only, GPU-accelerated
+      spBar.style.transform = `scaleX(${sy / max})`;
+
+      // Nav darkens at 80px
+      navEl.classList.toggle('is-dark', sy > 80);
+
+      rafBusy = false;
+    });
+  }, { passive: true });
+
+  </script>
+</body>
+</html>

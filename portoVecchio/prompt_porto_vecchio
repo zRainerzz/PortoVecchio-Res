@@ -1,0 +1,93 @@
+CONTEXT BRIEF — Porto Vecchio Website (Ready to Build)
+
+My name is Ghaith. Research is done. Read everything before touching code.
+
+The client: Porto Vecchio Ristorante Bar — Via Porto Romano 20/22, Ventotene (LT), Lazio. Bar + restaurant directly on the ancient Roman port, carved into tuff rock. Open daily 06:00–24:00. This is a regalo (gift) from me to my boss, the owner. Full access granted.
+
+Contacts (for footer):
+
+
+
+* Phone: +39 345 453 3201 / +39 0771 85041
+
+* Email: info@ristorantebarportovecchioventotene.com
+
+* Facebook: facebook.com/barportovecchio
+
+* Instagram: portovecchio_ventotene_ristoro
+
+* TripAdvisor: 287 reviews, 4.2/5, #5 of 21 in Ventotene
+
+Unique selling points to highlight:
+
+
+
+* Ancient Roman port carved entirely into tuff rock — historically significant, visually unique
+
+* Boat bar service: €2 surcharge, delivers drinks and food directly to boats docked in the port — this is rare and worth its own section
+
+* Fresh fish, tuna tartare, lobster, local Ventotene island products
+
+* Real photos will be provided by me (menu photos, gelato/ice cream price board, port view, venue shots)
+
+Aesthetic decided: warm dark elegant — think deep navy or dark warm tones, gold or amber accents, mediterranean texture. Not generic. Not cold. Feels like a summer night on an ancient port.
+
+Current website's problems (for context, not to copy anything from it):
+
+
+
+* Built on Webador, typo in domain ("ritorante"), broken links, pointless cart widget, no menu page, no SEO, no booking
+
+Structure — single HTML file, these sections in order:
+
+
+
+1. Hero — full screen, strong photo, name + tagline, IT/EN toggle
+
+2. About — the Roman port story, tuff rock, history, soul of the place
+
+3. Menu highlights — populated from photos I'll send (food + drinks + gelato prices)
+
+4. Boat service — dedicated section, this differentiates them from every other restaurant on the island
+
+5. Gallery — real photos I provide, clean grid or lightbox
+
+6. Social proof — TripAdvisor rating + a few pulled review quotes
+
+7. Contact + hours + embedded Google Map
+
+8. Footer — all contacts, socials, copyright
+
+Matterport 3D tour: No camera available currently. Add a hidden iframe placeholder — invisible on page (display:none or commented out cleanly), well-commented so future integration is one paste away. Don't leave a blank visible area.
+
+Technical requirements:
+
+
+
+* Single HTML file, everything inline (CSS + JS inside the file)
+
+* Bilingual IT/EN toggle (same as we've done before)
+
+* Fully mobile responsive
+
+* No frameworks, no build tools, no dependencies that need installing
+
+Understood. Updated that part of the prompt:
+
+- Not just fade-up. Think parallax on the hero, smooth section reveals with directional movement (elements sliding in from sides, staggered children), a subtle scroll-driven progress indicator, hover effects on cards and gallery items that feel tactile, the boat service section gets something special — maybe a slow drift animation or wave motion to match the port atmosphere
+
+- All CSS-driven where possible (GPU-accelerated transforms only — translate, scale, opacity — never animate height, width, or margin)
+
+- No GSAP, no heavy libraries. Vanilla JS + CSS animations only, so it stays a single file and loads instantly
+
+- Smooth but purposeful — every animation serves the content, nothing decorative for its own sake
+
+- Mobile gets the same experience, not a stripped-down version
+
+
+
+* Fast loading — compress nothing yet, but don't embed heavy libraries
+
+Photos: I will send them at the start of the conversation. Wait for them before building the menu/gallery sections. Everything else can be built around placeholder slots for photos.
+
+Do not start coding yet in this message. When I open the new conversation, I paste this, then immediately send the photos. You read both, confirm you have everything, then we start building section by section.
